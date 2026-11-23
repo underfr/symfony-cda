@@ -45,11 +45,6 @@ class BookType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('save', SubmitType::class, [
-                'label'=> 'Ajouter',
-                'attr' => ['class' => 'btn mt-2'],
-            ])
-
         ;
     }
 

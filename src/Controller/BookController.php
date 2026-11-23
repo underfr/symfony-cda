@@ -70,6 +70,32 @@ class BookController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/books/{id<\d+>}/edit', name: 'app_book_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé')]
+    public function edit(int $id, Request $request): Response
+    {
+        $book = $this->bookService->getBookById($id);
+
+        if (!$book) {
+            throw $this->createNotFoundException('Livre introuvable');
+        }
+
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->bookService->saveBook($book);
+
+            $this->addFlash('notice', 'Le livre ' . $book->getTitle() . ' a été modifié');
+
+            return $this->redirectToRoute('app_book', ['id' => $book->getId()]);
+        }
+
+        return $this->render('book/book_form.html.twig', [
+            'form' => $form,
+            'is_edit' => true,
+        ]);
+    }
 
     #[Route(path:'/books/categories/{categories}', name: 'app_book_categories')]
     public function showBooksByCategoriesName(string $categories): Response
@@ -111,7 +137,8 @@ class BookController extends AbstractController
         }
 
         return $this->render('book/book_form.html.twig', [
-            'form'=> $form
+            'form'=> $form,
+            'is_edit' => false,
         ]);
     }
 }

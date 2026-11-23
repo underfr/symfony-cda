@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
-{% block title %}Ajouter un livre{% endblock %}
+{% block title %}{{ is_edit ? 'Modifier le livre' : 'Ajouter un livre' }}{% endblock %}
 {% block body %}
-<h1>Ajouter un Livre</h1>
+<h1>{{ is_edit ? 'Modifier le livre' : 'Ajouter un livre' }}</h1>
 {{ form_start(form) }}
 {{ form_label(form.title) }}
 <div>{{ form_widget(form.title) }}</div>
@@ -30,6 +30,7 @@
     </fieldset>
 
     {{ form_rest(form) }}
+    <button type="submit" class="btn mt-2">{{ is_edit ? 'Enregistrer' : 'Ajouter' }}</button>
     {{ form_end(form) }}
 <twig:Toast/>
 {% endblock %}
