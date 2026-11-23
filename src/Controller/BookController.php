@@ -141,4 +141,26 @@ class BookController extends AbstractController
             'is_edit' => false,
         ]);
     }
+
+    #[Route(path: '/books/{id<\d+>}/delete', name: 'app_book_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé')]
+    public function delete(int $id, Request $request): Response
+    {
+        $book = $this->bookService->getBookById($id);
+
+        if (!$book) {
+            throw $this->createNotFoundException('Livre introuvable');
+        }
+
+        if (!$this->isCsrfTokenValid('delete_book_' . $book->getId(), $request->getPayload()->getString('_token'))) {
+            throw $this->createAccessDeniedException('Jeton CSRF invalide');
+        }
+
+        $title = $book->getTitle();
+        $this->bookService->deleteBook($book);
+
+        $this->addFlash('notice', 'Le livre ' . $title . ' a été supprimé');
+
+        return $this->redirectToRoute('app_books');
+    }
 }
