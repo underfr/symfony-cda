@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Book;
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -37,10 +39,17 @@ class BookType extends AbstractType
                 'attr' => ['placeholder' => 'auteur'],
                 'required'=> true
             ])
+            ->add('categories', EntityType::class, [
+                'class' => Category::class,
+                'label' => 'Catégories',
+                'multiple' => true,
+                'expanded' => true,
+            ])
             ->add('save', SubmitType::class, [
                 'label'=> 'Ajouter',
                 'attr' => ['class' => 'btn mt-2'],
             ])
+
         ;
     }
 

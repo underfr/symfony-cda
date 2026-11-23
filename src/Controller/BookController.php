@@ -28,14 +28,16 @@ class BookController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/books/{id}', name: 'app_book')]
+    #[Route(path: '/books/{id<\d+>}', name: 'app_book')]
     public function showBookById(int $id): Response
     {
         $book = $this->bookService->getBookById($id);
 
-        return $this->render('book/show_book_id.html.twig', [
-            'book' => $book
-        ]);
+        if (!$book) {
+            throw $this->createNotFoundException('Livre introuvable');
+        }
+
+        return $this->render('book/show_book_id.html.twig', ['book' => $book]);
     }
 
     #[Route(path: '/books/search/{title}', name: 'app_book_search')]
@@ -49,7 +51,7 @@ class BookController extends AbstractController
     }
 
     #[Route(path:'/books/recent/{date}', name: 'app_book_recent')]
-    public function showBooksByAfterPublishAt(string $date): Response 
+    public function showBooksByAfterPublishAt(string $date): Response
     {
         $books = $this->bookService->getBooksByAfterPublishAt($date);
 
@@ -59,7 +61,7 @@ class BookController extends AbstractController
     }
 
     #[Route(path:'/books/category/{name}', name: 'app_book_category')]
-    public function showBooksByCategoryName(string $name): Response 
+    public function showBooksByCategoryName(string $name): Response
     {
         $books = $this->bookService->getBooksByCategoryName($name);
 
@@ -70,7 +72,7 @@ class BookController extends AbstractController
 
 
     #[Route(path:'/books/categories/{categories}', name: 'app_book_categories')]
-    public function showBooksByCategoriesName(string $categories): Response 
+    public function showBooksByCategoriesName(string $categories): Response
     {
         $books = $this->bookService->getBooksByCategoriesName($categories);
         return $this->render('book/show_all_books.html.twig', [
@@ -82,9 +84,9 @@ class BookController extends AbstractController
     public function test(
         #[MapQueryParameter] array $categories
     ): Response {
-        
+
         $book = $this->bookService->getBooksByCategoriesNameV2($categories);
-        
+
         return $this->render('book/show_all_books.html.twig', [
             'books' => $book
         ]);
@@ -100,17 +102,16 @@ class BookController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->bookService->saveBook($book);
 
             $this->addFlash('notice', 'Le livre ' . $book->getTitle() . ' a été ajouté');
 
-            return $this->redirectToRoute('app_book_new');
+            return $this->redirectToRoute('app_book', ['id' => $book->getId()]);
         }
 
         return $this->render('book/book_form.html.twig', [
             'form'=> $form
-        ]); 
+        ]);
     }
 }

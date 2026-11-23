@@ -15,7 +15,7 @@
                     <div><dt class="mb-1 text-base-content/60">Propriétaire</dt><dd class="font-medium">{% if book.user %}<a class="link link-hover" href="{{ path('app_user', {id: book.user.id}) }}">{{ book.user.firstname }} {{ book.user.lastname }}</a>{% else %}Non renseigné{% endif %}</dd></div>
                 </dl>
                 <h3 class="mb-3 mt-6 text-sm text-base-content/60">Catégories</h3>
-                <ul class="flex flex-wrap gap-2">{% for category in book.categories %}<li><a class="badge badge-outline h-auto min-h-7 py-1" href="{{ path('app_category', {id: category.id}) }}">{{ category.name }}</a></li>{% else %}<li class="text-sm text-base-content/60">Aucune catégorie</li>{% endfor %}</ul>
+                <ul class="flex flex-wrap gap-2">{% for category in book.categories %}<li><span class="badge badge-outline h-auto min-h-7 py-1">{{ category.name }}</span></li>{% else %}<li class="text-sm text-base-content/60">Aucune catégorie</li>{% endfor %}</ul>
             </aside>
         </div>
     </div>
