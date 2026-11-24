@@ -13,16 +13,20 @@
             <a href="{{ path(item.route) }}" class="btn btn-sm {{ active ? 'btn-neutral' : 'btn-ghost' }}" {% if active
                 %} aria-current="page" {% endif %}>{{ item.label }}</a>
             {% endfor %}
-            {% if app.user.userIdentifier is defined %}
+            {% if app.user %}
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('app_category_new')}}" class="btn btn-sm btn-ghost">Ajouter une categorie</a>
-                    <a href="{{ path('app_book_new')}}" class="btn btn-sm btn-ghost">Ajouter un Livre</a>
+                    <a href="{{ path('app_category_new') }}" class="btn btn-sm btn-ghost">Ajouter une categorie</a>
+                    <a href="{{ path('app_book_new') }}" class="btn btn-sm btn-ghost">Ajouter un Livre</a>
                 {% endif %}
-            <a href="{{ path('app_categories')}}" class="btn btn-sm btn-ghost">Liste des categories</a>
-            <a href="{{ path('app_logout')}}" class="btn btn-sm btn-neutral">Se déconnecter</a>
+                <a href="{{ path('app_categories') }}" class="btn btn-sm btn-ghost">Liste des categories</a>
+
+                {% set profile_active = current_route in ['app_profile', 'app_profile_edit'] %}
+                <a href="{{ path('app_profile') }}" class="btn btn-sm {{ profile_active ? 'btn-neutral' : 'btn-ghost' }}" {% if profile_active %}aria-current="page"{% endif %}>Mon profil</a>
+
+                <a href="{{ path('app_logout') }}" class="btn btn-sm btn-neutral">Se déconnecter</a>
             {% else %}
-            <a href="{{ path('app_register')}}" class="btn btn-sm btn-neutral">S'inscrire</a>
-            <a href="{{ path('app_login')}}" class="btn btn-sm btn-neutral">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="btn btn-sm btn-neutral">S'inscrire</a>
+                <a href="{{ path('app_login') }}" class="btn btn-sm btn-neutral">Se connecter</a>
             {% endif %}
         </nav>
     </div>

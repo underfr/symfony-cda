@@ -28,6 +28,21 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
+            $iconFile = $form->get('icon')->getData();
+
+            if ($iconFile) {
+                $newFilename = bin2hex(random_bytes(16)) . '.' . $iconFile->guessExtension();
+
+                $iconFile->move(
+                    $this->getParameter('kernel.project_dir') . '/public/images',
+                    $newFilename
+                );
+
+                $user->setIcon($newFilename);
+            } else {
+                $user->setIcon('profil.png');
+            }
+
             $entityManager->persist($user);
             $entityManager->flush();
 

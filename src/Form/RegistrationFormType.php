@@ -15,6 +15,8 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -75,6 +77,20 @@ class RegistrationFormType extends AbstractType
             ->add('lastname', TextType::class, [
                 'label' => 'Saisir votre prénom',
                 'required' => false
+            ])
+            ->add('icon', FileType::class, [
+                'label' => 'Image de profil (PNG, JPG, JPEG – 2 Mo max)',
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['accept' => 'image/png, image/jpeg'],
+                'constraints' => [
+                    new File(
+                        maxSize: '2M',
+                        maxSizeMessage: 'L\'image ne doit pas dépasser 2 Mo.',
+                        mimeTypes: ['image/png', 'image/jpeg'],
+                        mimeTypesMessage: 'Formats acceptés : PNG, JPG ou JPEG.',
+                    ),
+                ],
             ])
             ->add('save', SubmitType::class,[
                 'label'=> 'Ajouter'
