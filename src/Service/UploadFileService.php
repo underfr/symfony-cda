@@ -4,6 +4,8 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
 
 class UploadFileService
 {
