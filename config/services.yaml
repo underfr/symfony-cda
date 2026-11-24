@@ -8,6 +8,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     upload_directory: '%kernel.project_dir%/public/uploads/images'
+    api_weather: '%env(API_KEY_WEATHER)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -22,6 +23,10 @@ services:
     App\Service\UploadFileService:
         arguments:
             $targetDirectory: '%upload_directory%'
+
+    App\Service\WeatherService:
+        arguments:
+            $apiKey: '%api_weather%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
