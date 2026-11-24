@@ -79,7 +79,7 @@ class RegistrationFormType extends AbstractType
                 'required' => false
             ])
             ->add('icon', FileType::class, [
-                'label' => 'Image de profil (PNG, JPG, JPEG – 2 Mo max)',
+                'label' => 'Image de profil (PNG, JPG, JPEG - 2 Mo max)',
                 'mapped' => false,
                 'required' => false,
                 'attr' => ['accept' => 'image/png, image/jpeg'],

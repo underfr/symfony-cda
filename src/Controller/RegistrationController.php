@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UploadFileService $uploadFileService): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -28,17 +28,8 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            $iconFile = $form->get('icon')->getData();
-
             if ($iconFile) {
-                $newFilename = bin2hex(random_bytes(16)) . '.' . $iconFile->guessExtension();
-
-                $iconFile->move(
-                    $this->getParameter('kernel.project_dir') . '/public/images',
-                    $newFilename
-                );
-
-                $user->setIcon($newFilename);
+                $user->setIcon($uploadFileService->upload($iconFile));
             } else {
                 $user->setIcon('profil.png');
             }
